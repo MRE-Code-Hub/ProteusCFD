@@ -164,7 +164,7 @@ public:
   //These are the required member functions for the solutionspace
   void PreIterate(){};
   void PreTimeAdvance(){};
-  bool NewtonIterate(){};
+  bool NewtonIterate(){return false;};
   void PostTimeAdvance(){};
   void WriteSolution(){};
   void WriteRestartFile(){};

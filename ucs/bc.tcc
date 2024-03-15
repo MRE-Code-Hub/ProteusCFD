@@ -81,6 +81,7 @@ BCObj<Type>* BoundaryConditions<Type>::GetBCObj(Int factag)
     ss << "GetBCObj() couldn't find factag map -- this shouldn't happen -- dying\n";
     ss << "Request made for factag " << factag;
     Abort << ss.str();
+    return NULL;
   }
   BCObj<Type>* bco = bc_objs[factag];
   if(bco != NULL){
@@ -90,6 +91,7 @@ BCObj<Type>* BoundaryConditions<Type>::GetBCObj(Int factag)
   ss << "GetBCObj() got a NULL pointer -- this shouldn't happen -- dying\n";
   ss << "Request made for factag " << factag;
   Abort << ss.str();
+  return NULL;
 }
 
 

@@ -157,6 +157,7 @@ std::string Mesh<Type>::GetStringFromElemType(Int etype)
     break;
   default :
     std::cerr << "Type not defined in GetStringFromElemType()" << std::endl;
+    return "ERROR";
   }
   
 }
@@ -2599,6 +2600,7 @@ Mesh<Type>::~Mesh()
 // returns (sorted) elements by id that are labeled with the appropriate factag
 // elementIds - vector which will contain list of elements on return
 // factag - factag of surface for which we'd like the elements
+// return number of elements found
 template <class Type> 
 Int Mesh<Type>::FindSurfaceElementsWithFactag(std::vector<Int>& elementIds, Int factag)
 {
@@ -2609,6 +2611,7 @@ Int Mesh<Type>::FindSurfaceElementsWithFactag(std::vector<Int>& elementIds, Int 
     }
   }
   std::sort(elementIds.begin(), elementIds.end());
+  return elementIds.size();
 }
 
 // returns the average sizing of all surface elements on a factag
