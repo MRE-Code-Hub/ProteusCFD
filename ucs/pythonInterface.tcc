@@ -6,7 +6,8 @@ void PythonWrapper::SetInitialConditions(Type* Qinf, int neqn, int nauxvars, Typ
 {
   //I'm not sure why but if I remove this import we segfault, it appears numpy is being
   //unloaded somehow from initialization
-  import_array();
+  // We call import_array1 instead of import_array b/c we require a void return.
+  import_array1();
 
   //This routine assumes that Qinf and Qreturn are the same size... be warned
   //This routine is not yet generalized to deal with complex variables
@@ -14,10 +15,10 @@ void PythonWrapper::SetInitialConditions(Type* Qinf, int neqn, int nauxvars, Typ
   size_t nauxvarss = nauxvars;
   size_t tot = neqn+nauxvars;
   npy_intp inputsize = tot;
-  PyObject *npqinf,*npeqn,*npauxvars,*npq,*npxyz; 
+    PyObject *npqinf,*npeqn,*npauxvars,*npq,*npxyz; 
   npqinf = (PyObject*)PyArray_SimpleNewFromData(1, &inputsize, NPY_DOUBLE, (double*)Qinf);
-  npeqn = PyInt_FromSize_t(neqns);
-  npauxvars = PyInt_FromSize_t(nauxvarss);
+  npeqn = PyLong_FromSize_t(neqns);
+  npauxvars = PyLong_FromSize_t(nauxvarss);
   npq = (PyObject*)PyArray_SimpleNewFromData(1, &inputsize, NPY_DOUBLE, (double*)Qreturn);
   npy_intp dim = 3;
   npxyz = (PyObject*)PyArray_SimpleNewFromData(1, &dim, NPY_DOUBLE, coordsXYZ);
@@ -37,7 +38,8 @@ void PythonWrapper::GetBoundaryVariables(Type* QL, Type* QR, int neqn, int nauxv
 {
   //I'm not sure why but if I remove this import we segfault, it appears numpy is being
   //unloaded somehow from initialization
-  import_array();
+  // We call import_array1 instead of import_array b/c we require a void return.
+  import_array1();
 
   //This routine assumes that Qinf and Qreturn are the same size... be warned
   //This routine is not yet generalized to deal with complex variables
@@ -48,8 +50,8 @@ void PythonWrapper::GetBoundaryVariables(Type* QL, Type* QR, int neqn, int nauxv
   PyObject *npql,*npqr,*npeqn,*npauxvars,*npq,*npxyz,*normxyz; 
   npql = (PyObject*)PyArray_SimpleNewFromData(1, &inputsize, NPY_DOUBLE, (double*)QL);
   npqr = (PyObject*)PyArray_SimpleNewFromData(1, &inputsize, NPY_DOUBLE, (double*)QR);
-  npeqn = PyInt_FromSize_t(neqns);
-  npauxvars = PyInt_FromSize_t(nauxvarss);
+  npeqn = PyLong_FromSize_t(neqns);
+  npauxvars = PyLong_FromSize_t(nauxvarss);
   npy_intp dim = 3;
   npy_intp dim2 = 4;
   npxyz = (PyObject*)PyArray_SimpleNewFromData(1, &dim, NPY_DOUBLE, wallXYZ);
@@ -78,7 +80,8 @@ void PythonWrapper::GetBoundaryMovement(Type time, int* nodelist, int sizenodeli
 {
   //I'm not sure why but if I remove this import we segfault, it appears numpy is being
   //unloaded somehow from initialization
-  import_array();
+  // We call import_array1 instead of import_array b/c we require a void return.
+  import_array1();
 
   PyObject *nptime, *npnodelist,*npxyz,*npxyzcurr,*npdxyz; 
   npy_intp dim  = nnode*3; //3 coordinate directions

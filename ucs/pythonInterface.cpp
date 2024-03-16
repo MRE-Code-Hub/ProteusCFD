@@ -18,12 +18,14 @@ PythonWrapper::PythonWrapper(std::string path, std::string fileRoot, std::string
   if(!numpyLoaded){
     std::cout << "PythonWrapper:: loading NumPy" << std::endl;
     numpyLoaded++;
-    import_array();
+    // Use import_array1() instead of import_array() so the macro has a void return.
+    import_array1();
   }
 
   AddToPath(path);
-  
-  pName = PyString_FromString(fileRoot.c_str());
+
+  // Python3 is now UTF-8 compatible 
+  pName = PyUnicode_FromString(fileRoot.c_str());
   pModule = PyImport_Import(pName);
 
   std::cout << "PythonWrapper:: imported" << std::endl;
@@ -114,7 +116,7 @@ int PythonWrapper::CallTwoIntFunction(int a, int b)
   int returnVal = -11111;
 
   pArgs = PyTuple_New(2);
-  pValue = PyInt_FromLong(a);
+  pValue = PyLong_FromLong(a);
   if(!pValue){
     Py_DECREF(pArgs);
     std::cerr << "Cannot convert argument in PythonWrapper" << std::endl;
@@ -125,7 +127,7 @@ int PythonWrapper::CallTwoIntFunction(int a, int b)
     PyTuple_SetItem(pArgs, 0, pValue);
   }
 
-  pValue = PyInt_FromLong(b);
+  pValue = PyLong_FromLong(b);
   if(!pValue){
     Py_DECREF(pArgs);
     std::cerr << "Cannot convert argument in PythonWrapper" << std::endl;
@@ -146,7 +148,7 @@ int PythonWrapper::CallTwoIntFunction(int a, int b)
   }
 
   //we expect back a float
-  returnVal = PyInt_AsLong(pValue);
+  returnVal = PyLong_AsLong(pValue);
   //returnVal = PyFloat_AsDouble(pValue);
 
   Py_DECREF(pValue);

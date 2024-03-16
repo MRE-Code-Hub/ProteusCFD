@@ -1,6 +1,6 @@
 # Uncomment any below to change compiler behavior
 TOOLCHAIN = GNU
-HAS_PYTHON = TRUE
+#HAS_PYTHON = TRUE
 HAS_CGNS = TRUE
 #HAS_OPENMP = TRUE
 #DEBUG = TRUE
@@ -39,9 +39,9 @@ endif
 #GNU
 ifeq ($(TOOLCHAIN),GNU)
 	CXX = g++
-	MPICXX = mpicxx
+	MPICXX = mpicc.openmpi
 	#CXX_OPTS = -O0 -g -std=c++11 -fPIC
-	CXX_OPTS = -O3 -g -std=c++11 -fPIC
+	CXX_OPTS = -O3 -g -std=c++11 -fPIC 
 	LINK_OPTS = -Bstatic
 	FXX = mpif90
 	FXX_OPTS = -O3 
@@ -114,7 +114,7 @@ LCXXFLAGS = -L$(HDF5_LIB) -L./structuralDynamics -L$(TINYXML_LIB) -L$(GTEST_LIB)
 LFXXFLAGS = 
 
 #CXXLIBS = -lmetis -lgomp -lmpi_cxx -lmpi -lefence
-CXXLIBS = -lcommon -lz -lhdf5
+CXXLIBS = -lcommon -lz -lhdf5 -lm -lmpi_cxx
 #more mpi stuff from running mpiCC --showme
 CXXLIBS += -lstdc++ 
 FXXLIBS = -lstdc++ -lmpi 
@@ -147,14 +147,20 @@ ifdef PENGUIN
       INCLUDES += -I$(PYTHONDIR)/include/python2.7
       INCLUDES += -I$(PYTHONDIR)/lib/python2.7/site-packages/numpy/core/include
       LCXXFLAGS += -L$(PYTHONDIR)/lib -L/public/apps/python/2.7.15/gcc.6.2.0/lib/python2.7/site-packages/numpy/core 
-      CXXLIBS += -lpython2.7 -ldl -lutil -lpthread -lm
+      CXXLIBS += -lpython2.7 -ldl -lutil -lpthread
 else
-     PYTHONCFLAGS := $(shell source ~/.bashrc && python-config --cflags)
-     PYTHONLDFLAGS := $(shell source ~/.bashrc && python-config --ldflags)
-     PYTHONINCLUDES := $(shell source ~/.bashrc && python-config --includes)
-
+     # It is suggested that the user install and activate anaconda3 as the default python when
+     # compiling ProteusCFD. This can be done by adding the following type of line to the ~/.bashrc
+     # file export PATH=~/bin/anaconda3/bin:$PATH after unzipping anaconda to ~/bin/ directory.
+     PYTHONCFLAGS := $(shell source ~/.bashrc && /usr/bin/python3-config --cflags)
+     PYTHONLDFLAGS := $(shell source ~/.bashrc && /usr/bin/python3-config --ldflags --embed)
+     PYTHONINCLUDES := $(shell source ~/.bashrc && /usr/bin/python3-config --includes)
+     $(info PYTHONCFLAGS is $(PYTHONCFLAGS))     
+     $(info PYTHONLDFLAGS is $(PYTHONLDFLAGS))     
+     $(info PYTHONINCLUDES is $(PYTHONINCLUDES))     
      INCLUDES += $(PYTHONINCLUDES)
      LCXXFLAGS += $(PYTHONLDFLAGS)
 endif
      CXX_OPTS += -D_HAS_PYTHON
 endif
+

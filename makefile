@@ -80,11 +80,6 @@ DEPS_TEST = $(SRCS_TEST:.cpp=.d)
 
 $(EXE_SOLVER):  $(TINYXMLDIR)/libtinyxml.a  $(DEPS_SOLVER) $(OBJS_SOLVER) ./ucs/libcommon.a structuralDynamics/libstructdyn.a $(LAPACK_LIB)/liblapacke.a $(HDF5_LIB)/libhdf5.a
 	$(MPICXX) $(LINK_OPTS) -o $(EXE_SOLVER) $(LCXXFLAGS) $(OBJS_SOLVER) $(CXXLIBS) -lstructdyn -ltinyxml
-ifdef HAS_PYTHON 	
-	@echo Python includes are $(PYTHONINCLUDES)
-	@echo Python cflags are $(PYTHONCFLAGS)
-	@echo Python ldflags are $(PYTHONLDFLAGS)
-endif
 
 
 $(EXE_DECOMP): $(METISINSTALLDIR)/libmetis.a  ./ucs/libcommon.a  $(HDF5_LIB)/libhdf5.a $(DEPS_DECOMP) $(OBJS_DECOMP) 
